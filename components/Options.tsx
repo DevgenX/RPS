@@ -2,8 +2,9 @@ import React, { FC, SetStateAction } from "react";
 import { connectWallet } from "@/utils/connect";
 
 interface OptionsProps {
-  user: string;
+  user: string | null;
   setMove: React.Dispatch<SetStateAction<number>>;
+  role?: "player1" | "player2" | null;
   contractAddress?: string;
 }
 
@@ -17,10 +18,15 @@ export const MOVE_MAPPING: Record<MoveTypes, number> = {
   Spock: 5,
 };
 
-const Options: FC<OptionsProps> = ({ user, setMove, contractAddress }) => {
+const Options: FC<OptionsProps> = ({
+  user,
+  setMove,
+  contractAddress,
+  role,
+}) => {
   return (
     <>
-      <div className="flex flex-col items-center mb-3 p-3">
+      <div className="relative flex flex-col items-center mb-3 p-3">
         <h1 className="text-2xl font-bold mb-4">
           Rock Paper Scissors Lizard Spock
         </h1>

@@ -1,11 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useWallet } from "@/hooks/useWallet";
 
-import {
-  connectWallet,
-  CheckIsWalletConnected,
-  hashMove,
-  getSigner,
-} from "../utils/connect";
+import { hashMove, getSigner, removeItems } from "../utils/connect";
 
 import Options from "./Options";
 import Link from "next/link";
@@ -22,9 +18,16 @@ export const MOVE_MAPPING: Record<MoveTypes, number> = {
 
 const HashScreen = () => {
   const [move, setMove] = useState<number>(0);
-  const [salt, setSalt] = useState(Math.floor(Math.random() * 1000000000));
-  const [user, setUser] = useState<string>("");
+  const [salt, setSalt] = useState<number>(0);
   const [c1Hash, setC1Hash] = useState<string>("");
+
+  const account = useWallet();
+
+  const handleGenerateSalt = () => {
+    const saltValue = Math.floor(Math.random() * 1000000000);
+    localStorage.setItem("salt", saltValue.toString());
+    setSalt(saltValue);
+  };
 
   const handleHashMove = async () => {
     try {
@@ -34,7 +37,7 @@ const HashScreen = () => {
       }
       const signer = await getSigner();
       const hashedValue = await hashMove(move, salt, signer);
-
+      localStorage.setItem("hash", hashedValue);
       setC1Hash(hashedValue);
       alert("Move hashed successfully!");
     } catch (error) {
@@ -44,17 +47,17 @@ const HashScreen = () => {
 
   localStorage.setItem("salt", salt.toString());
 
-  useEffect(() => {
-    const getUser = async () => {
-      const connectedUser = await CheckIsWalletConnected();
-      setUser(connectedUser);
-    };
-    getUser();
-  }, []);
-
   return (
-    <div className="flex flex-col justify-center items-center border w-1/2 p-5 bg-gray-100 rounded-lg shadow-md text-black">
-      <Options user={user} setMove={setMove} />
+    <div className="relative flex flex-col justify-center items-center border w-1/2 p-5 bg-gray-100 rounded-lg shadow-md text-black">
+      <div className="absolute right-2 top-2">
+        <button
+          className="bg-pink-600 text-white p-2 mb-5 rounded-md hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-50"
+          onClick={removeItems}
+        >
+          REFRESH
+        </button>
+      </div>
+      <Options user={account} setMove={setMove} />
 
       <label className="block text-black">Salt</label>
       <small>
@@ -69,6 +72,12 @@ const HashScreen = () => {
       />
 
       <div className="flex flex-col justify-center items-center w-full">
+        <button
+          className="mt-5 bg-blue-600 p-2 hover:scale-125 rounded-md text-white"
+          onClick={handleGenerateSalt}
+        >
+          Generate Salt
+        </button>
         <button
           className="mt-5 bg-blue-600 p-2 hover:scale-125 rounded-md text-white"
           onClick={handleHashMove}

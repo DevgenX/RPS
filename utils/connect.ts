@@ -22,19 +22,6 @@ export const connectWallet = async () => {
   }
 };
 // Check if the user has a connected wallet
-export const CheckIsWalletConnected = async () => {
-  try {
-    if (!window.ethereum) return alert("Install metamask");
-    const accounts = await window.ethereum.request({
-      method: "eth_accounts",
-    });
-
-    const firstAccount = accounts[0];
-    return firstAccount;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 // Connect to Hasher Contract using ethers
 export const getHasherContract = (signer: ethers.Signer) => {
@@ -105,7 +92,7 @@ export const connectToSmartContract = async () => {
   }
 };
 
-const solveGame = async (
+export const solveGame = async (
   contractAddress: string,
   revealedMove: number,
   revealedSalt: number
@@ -118,4 +105,11 @@ const solveGame = async (
   } catch (error) {
     console.error("Error revealing move:", error);
   }
+};
+
+export const removeItems = () => {
+  localStorage.removeItem("salt");
+  localStorage.removeItem("contractAddress");
+  localStorage.removeItem("hash");
+  localStorage.removeItem("address");
 };
