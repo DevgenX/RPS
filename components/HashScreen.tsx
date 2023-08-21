@@ -25,7 +25,11 @@ const HashScreen = () => {
 
   const handleGenerateSalt = () => {
     const saltValue = Math.floor(Math.random() * 1000000000);
-    localStorage.setItem("salt", saltValue.toString());
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("salt", saltValue.toString());
+    }
+
     setSalt(saltValue);
   };
 
@@ -37,15 +41,17 @@ const HashScreen = () => {
       }
       const signer = await getSigner();
       const hashedValue = await hashMove(move, salt, signer);
-      localStorage.setItem("hash", hashedValue);
+
+      if (typeof window !== "undefined") {
+        localStorage.setItem("hash", hashedValue);
+      }
+
       setC1Hash(hashedValue);
       alert("Move hashed successfully!");
     } catch (error) {
       console.error("Error hashing move:", error);
     }
   };
-
-  localStorage.setItem("salt", salt.toString());
 
   return (
     <div className="relative flex flex-col justify-center items-center border w-1/2 p-5 bg-gray-100 rounded-lg shadow-md text-black">

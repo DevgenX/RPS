@@ -41,7 +41,9 @@ const PlayScreen = () => {
 
     setContractAddress(deployedContractAddress);
 
-    localStorage.setItem("contractAddress", deployedContractAddress);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("contractAddress", deployedContractAddress);
+    }
   };
 
   const handleGetOpponentAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +54,10 @@ const PlayScreen = () => {
     //   setDisabledInput(true);
     // }
 
-    localStorage.setItem("address", opponent);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("address", opponent);
+    }
+
     setOpponentAddress(opponent);
   };
 
@@ -77,7 +82,11 @@ const PlayScreen = () => {
 
   const handleGetStakedAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const amount = e.target.value;
-    localStorage.setItem("amount", amount);
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("amount", amount);
+    }
+
     setStake(parseFloat(amount));
   };
 
@@ -149,7 +158,7 @@ const PlayScreen = () => {
     if (account) {
       determineRole();
     }
-  }, [account, contractAddress]);
+  }, [account, contractAddress, determineRole]);
 
   return (
     <div className="relative flex flex-col justify-center items-center border w-1/2 p-5 bg-gray-100 rounded-lg shadow-md text-black">
