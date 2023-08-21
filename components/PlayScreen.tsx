@@ -152,13 +152,14 @@ const PlayScreen = () => {
 
     const getStakedAmount = localStorage.getItem("amount");
     if (getStakedAmount) {
-      setStake(parseInt(getStakedAmount));
+      setStake(parseFloat(getStakedAmount));
     }
 
     if (account) {
       determineRole();
     }
-  }, [account, contractAddress, determineRole]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account, contractAddress]);
 
   return (
     <div className="relative flex flex-col justify-center items-center border w-1/2 p-5 bg-gray-100 rounded-lg shadow-md text-black">
@@ -223,8 +224,10 @@ const PlayScreen = () => {
           <input
             className="mb-4 p-2 border rounded w-full text-center"
             type="number"
+            value={stake}
             placeholder="How much do you want to BET? (ETH)"
             onChange={(e) => handleGetStakedAmount(e)}
+            readOnly={role === "player2"}
           />
         </>
       ) : (
