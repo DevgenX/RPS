@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useWallet } from "@/hooks/useWallet";
 import { ethers } from "ethers";
 import {
-  connectWallet,
   deployRPSContract,
   getRPSContract,
   getSigner,
@@ -20,7 +19,6 @@ const PlayScreen = () => {
   const [opponentAddress, setOpponentAddress] = useState<string>("");
   const [salt, setSalt] = useState<number>(0);
   const [stake, setStake] = useState<number>(0);
-  // const [user, setUser] = useState<string>("");
   const [contractAddress, setContractAddress] = useState<string>("");
   const [role, setRole] = useState<"player1" | "player2" | null>(null);
   const [hashedVal, setHashValue] = useState<string>("");
@@ -28,9 +26,6 @@ const PlayScreen = () => {
   const account = useWallet();
 
   const handleStartGame = async () => {
-    // const accounts = await connectWallet();
-    // if (!accounts || accounts.length === 0) return;
-    // setUser(accounts);
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 
@@ -51,6 +46,12 @@ const PlayScreen = () => {
 
   const handleGetOpponentAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     const opponent = e.target.value;
+
+    // if (opponent.toLowerCase() === account?.toLowerCase()) {
+    //   alert("You cannot play with yourself");
+    //   setDisabledInput(true);
+    // }
+
     localStorage.setItem("address", opponent);
     setOpponentAddress(opponent);
   };
@@ -90,9 +91,9 @@ const PlayScreen = () => {
       const rpsContract = getRPSContract(contractAddress, signer);
 
       if (role === "player1") {
-        await rpsContract.j1Timeout();
-      } else if (role === "player2") {
         await rpsContract.j2Timeout();
+      } else if (role === "player2") {
+        await rpsContract.j1Timeout();
       } else {
         throw new Error("Current user is not a participant in the game.");
       }
@@ -214,7 +215,6 @@ const PlayScreen = () => {
             className="mb-4 p-2 border rounded w-full text-center"
             type="number"
             placeholder="How much do you want to BET? (ETH)"
-            value={stake}
             onChange={(e) => handleGetStakedAmount(e)}
           />
         </>

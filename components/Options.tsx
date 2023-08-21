@@ -18,12 +18,7 @@ export const MOVE_MAPPING: Record<MoveTypes, number> = {
   Spock: 5,
 };
 
-const Options: FC<OptionsProps> = ({
-  user,
-  setMove,
-  contractAddress,
-  role,
-}) => {
+const Options: FC<OptionsProps> = ({ user, setMove }) => {
   return (
     <>
       <div className="relative flex flex-col items-center mb-3 p-3">
