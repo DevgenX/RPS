@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import Web3Modal from "web3modal";
-import { hasherABI, hasherAddress } from "./constants";
+import { hasherABI, hasherAddress, contractAddress } from "./constants";
 import RPS_ABI from "./rpsABI.json";
 import RPS_BYTECODE from "./RPS_Bytecode";
 
@@ -102,5 +102,20 @@ export const connectToSmartContract = async () => {
     // return contract;
   } catch (e) {
     throw new Error("No ethereum object");
+  }
+};
+
+const solveGame = async (
+  contractAddress: string,
+  revealedMove: number,
+  revealedSalt: number
+) => {
+  try {
+    const signer = await getSigner();
+    const rpsContract = getRPSContract(contractAddress, signer);
+    await rpsContract.solve(revealedMove, revealedSalt);
+    alert("Move revealed successfully!");
+  } catch (error) {
+    console.error("Error revealing move:", error);
   }
 };

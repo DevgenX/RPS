@@ -4,6 +4,7 @@ import { connectWallet } from "@/utils/connect";
 interface OptionsProps {
   user: string;
   setMove: React.Dispatch<SetStateAction<number>>;
+  contractAddress?: string;
 }
 
 export type MoveTypes = "Rock" | "Paper" | "Scissors" | "Lizard" | "Spock";
@@ -16,7 +17,7 @@ export const MOVE_MAPPING: Record<MoveTypes, number> = {
   Spock: 5,
 };
 
-const Options: FC<OptionsProps> = ({ user, setMove }) => {
+const Options: FC<OptionsProps> = ({ user, setMove, contractAddress }) => {
   return (
     <>
       <div className="flex flex-col items-center mb-3 p-3">
@@ -31,7 +32,8 @@ const Options: FC<OptionsProps> = ({ user, setMove }) => {
           {user ? user.slice(0, 5) + ".." : "Connect Wallet"}
         </button>
       </div>
-      <label className="block text-black mb-2">Select a Move:</label>
+
+      <label className="block text-black mb-2"></label>
       <select
         className="mb-4 p-2 border rounded"
         onChange={(e) => setMove(MOVE_MAPPING[e.target.value as MoveTypes])}

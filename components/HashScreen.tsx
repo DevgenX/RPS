@@ -34,12 +34,15 @@ const HashScreen = () => {
       }
       const signer = await getSigner();
       const hashedValue = await hashMove(move, salt, signer);
+
       setC1Hash(hashedValue);
       alert("Move hashed successfully!");
     } catch (error) {
       console.error("Error hashing move:", error);
     }
   };
+
+  localStorage.setItem("salt", salt.toString());
 
   useEffect(() => {
     const getUser = async () => {
