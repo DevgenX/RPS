@@ -23,14 +23,23 @@ const HashScreen = () => {
 
   const account = useWallet();
 
-  const handleGenerateSalt = () => {
-    const saltValue = Math.floor(Math.random() * 1000000000);
+  // const handleGenerateSalt = () => {
+  //   const saltValue = Math.floor(Math.random() * 1000000000);
 
+  //   if (typeof window !== "undefined") {
+  //     localStorage.setItem("salt", saltValue.toString());
+  //   }
+
+  //   setSalt(saltValue);
+  // };
+
+  const handleGenerateSalt = async () => {
+    const response = await fetch("/api/generateSalt", { method: "POST" });
+    const data = await response.json();
     if (typeof window !== "undefined") {
-      localStorage.setItem("salt", saltValue.toString());
+      localStorage.setItem("salt", data.salt.toString());
     }
-
-    setSalt(saltValue);
+    setSalt(data.salt);
   };
 
   const handleHashMove = async () => {
